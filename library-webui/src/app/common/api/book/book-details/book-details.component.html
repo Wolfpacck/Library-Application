@@ -1,0 +1,134 @@
+<h2>Book : {{book.name}}</h2>
+<hr>
+<button class="btn btn-secondary" (click)="backClicked()" >Back</button>
+<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateBookPanel"
+(click)="LoadBookUpdateForm(book)" data-whatever="@mdo"> Update Book Information </button>
+
+
+  <!--Create Book form start-->
+  <div  class="modal fade" id="updateBookPanel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Book...</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div *ngIf="showModal; else elseBlock2" class="modal-body">
+        <form [formGroup]="BookForm" (ngSubmit)="updateBook()">
+          <div class="form-group">
+            <label>name</label>
+            <input type="text" formControlName="name" class="form-control"
+              [ngClass]="{ 'is-invalid': f1.name.errors }" />
+            <div *ngIf="f1.name.errors" class="invalid-feedback">
+              <div *ngIf="f1.name.errors.required">name is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Publisher</label>
+            <input type="text" formControlName="publisher" class="form-control"
+              [ngClass]="{ 'is-invalid': f1.publisher.errors }" />
+            <div *ngIf="f1.publisher.errors" class="invalid-feedback">
+              <div *ngIf="f1.publisher.errors.required">publisher is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>barcode</label>
+            <input type="text" formControlName="barcode" class="form-control"
+              [ngClass]="{ 'is-invalid': f1.barcode.errors }" />
+            <div *ngIf="f1.barcode.errors" class="invalid-feedback">
+              <div *ngIf="f1.barcode.errors.required">barcode is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="badge">Book Status</label>
+            <select formControlName="bookStatus" class="form-control" >
+              <option *ngFor="let val of bookStatuses" [value]="val">{{val}}</option>
+            </select>
+            <div *ngIf="f1.bookStatus.errors" class="invalid-feedback">
+              <div *ngIf="f1.bookStatus.errors.required">bookStatus is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Author</label>
+            <input type="text" readonly [value]="book.author.name +' '+ book.author.surname" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>content</label>
+            <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"  formControlName="content" class="form-control"
+              [ngClass]="{ 'is-invalid': f1.content.errors }"></textarea>
+            <div *ngIf="f1.content.errors" class="invalid-feedback">
+              <div *ngIf="f1.content.errors.required">content is required</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" >UPDATE</button>
+          </div>
+        </form>
+      </div>
+
+      <ng-template #elseBlock2>
+          <div class="modal-body">
+            <h5>Perfect.....!</h5>
+            <strong>Book was updated.....</strong>
+          </div>
+        </ng-template>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal" >Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!--Update Book form ende-->
+
+  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter">
+    Author Information of the Book
+  </button>
+
+  <!--Student details start-->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Author Information</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>Name surname : </b>{{book.author.name}} {{book.author.surname}}</li>
+            <li class="list-group-item"><b>email : </b>{{book.author.email}}</li>
+            <li class="list-group-item"><b>Phone : </b>{{book.author.phone}}</li>
+            <li class="list-group-item"><b>Surname : </b>{{book.author.surname}}</li>
+          </ul>
+          <p class="text-break"><b>about : </b> {{book.author.about}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Student details end-->
+<hr>
+
+<div class="card">
+  <h5 class="card-header">Features of the Book</h5>
+  <div class="card-body">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><b>Name : </b>{{book.name}}</li>
+      <li class="list-group-item"><b>Publisher : </b>{{book.publisher}} </li>
+      <li class="list-group-item"><b>Surname: </b>{{book.author.name}} {{book.author.surname}} </li>
+      <li class="list-group-item"><b>Status: </b>{{book.bookStatus}}</li>
+      <li class="list-group-item"><b>barcode: </b>{{book.barcode}}</li>
+      <li class="list-group-item">
+        <h5 class="card-title">{{book.name}}  What is the content of the book? </h5>
+        <p class="card-text"><b>Book content? </b>{{book.content}} </p>
+      </li>
+    </ul>
+  </div>
+</div>

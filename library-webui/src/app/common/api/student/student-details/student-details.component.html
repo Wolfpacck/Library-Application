@@ -1,0 +1,159 @@
+<h2>Student : {{student.fullname}}</h2>
+<hr>
+<div *ngIf="message" class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Attention !!! </strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<button class="btn btn-secondary" (click)="backClicked()">Back</button>
+<a href="/student/get-book/{{student.id}}" class="btn btn-warning" >choose book</a>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateStudentPanel"
+  (click)="LoadStudentUpdateForm(student)" data-whatever="@mdo"> Update </button>
+
+
+<!--Update Student form start-->
+<div class="modal fade" id="updateStudentPanel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Author Information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div *ngIf="updated; else elseBlock1" class="modal-body">
+        <form [formGroup]="StudentUpdateForm" (ngSubmit)="updateStudent()">
+          <div class="form-group">
+            <label>fullname</label>
+            <input type="text" formControlName="fullname" class="form-control"
+              [ngClass]="{ 'is-invalid': suf.fullname.errors }" />
+            <div *ngIf="suf.fullname.errors" class="invalid-feedback">
+              <div *ngIf="suf.fullname.errors.required">fullname is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>tc no</label>
+            <input type="text" formControlName="tcNo" class="form-control"
+              [ngClass]="{ 'is-invalid': suf.tcNo.errors }" />
+            <div *ngIf="suf.tcNo.errors" class="invalid-feedback">
+              <div *ngIf="suf.tcNo.errors.min">Tc No is least 11 characters</div>
+              <div *ngIf="suf.tcNo.errors.max">Tc No is most 11 characters</div>
+              <div *ngIf="suf.tcNo.errors.required">Tc No is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>email</label>
+            <input type="email" formControlName="email" class="form-control"
+              [ngClass]="{ 'is-invalid': suf.email.errors }" />
+            <div *ngIf="suf.email.errors" class="invalid-feedback">
+              <div *ngIf="suf.email.errors.required">email is required</div>
+              <div *ngIf="suf.email.errors.email">email must be email adress</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>phone</label>
+            <input type="text" formControlName="phone" class="form-control"
+              [ngClass]="{ 'is-invalid': suf.phone.errors }" />
+            <div *ngIf="suf.phone.errors" class="invalid-feedback">
+              <div *ngIf="suf.phone.errors.required">phone is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="badge">city</label>
+            <select formControlName="city" class="form-control" >
+              <option *ngFor="let val of cities" [value]="val">{{val}}</option>
+            </select>
+            <div *ngIf="suf.city.errors" class="invalid-feedback">
+              <div *ngIf="suf.city.errors.required">city is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>address</label>
+            <input type="text" formControlName="address" class="form-control"
+              [ngClass]="{ 'is-invalid': suf.address.errors }" />
+            <div *ngIf="suf.address.errors" class="invalid-feedback">
+              <div *ngIf="suf.address.errors.required">address is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>university</label>
+            <input type="text" formControlName="university" class="form-control"
+              [ngClass]="{ 'is-invalid': suf.university.errors }" />
+            <div *ngIf="suf.university.errors" class="invalid-feedback">
+              <div *ngIf="suf.university.errors.required">university No is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>department</label>
+            <input type="text" formControlName="department" class="form-control"
+              [ngClass]="{ 'is-invalid': suf.department.errors }" />
+            <div *ngIf="suf.department.errors" class="invalid-feedback">
+              <div *ngIf="suf.department.errors.required">depertmant No is required</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">UPDATE</button>
+          </div>
+        </form>
+      </div>
+      <ng-template #elseBlock1>
+        <div class="modal-body">
+          <h5>Perfect.....!</h5>
+          <strong>Student was updated.....</strong>
+        </div>
+      </ng-template>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Update Student form ende-->
+
+<div class="card">
+  <h5 class="card-header">Student information</h5>
+  <div class="card-body">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><b>Name surname : </b>{{student.fullname}}</li>
+      <li class="list-group-item"><b>tc no : </b>{{student.tcNo}} </li>
+      <li class="list-group-item"><b>email : </b>{{student.email}} </li>
+      <li class="list-group-item"><b>phone: </b>{{student.phone}}</li>
+      <li class="list-group-item"><b>university : </b>{{student.university}}</li>
+      <li class="list-group-item"><b>department : </b>{{student.department}}</li>
+      <li class="list-group-item"><b>city : </b>{{student.city}}</li>
+      <li class="list-group-item"><b>address : </b>{{student.address}} </li>
+    </ul>
+  </div>
+</div>
+<hr>
+<h4>Books Bought</h4>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">barcode</th>
+      <th scope="col">Author Name</th>
+      <th scope="col">Author SurName</th>
+      <th scope="col">publisher</th>
+      <th scope="col">bookStatus</th>
+      <th scope="col">Transactions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let book of books">
+      <td>{{book.id}}</td>
+      <td>{{book.name}}</td>
+      <td>{{book.author.name}}</td>
+      <td>{{book.author.surname}}</td>
+      <td>{{book.publisher}}</td>
+      <td>{{book.bookStatus}}</td>
+      <td>
+        <a [routerLink]="['../../../book/book-detail/',book.id]" class="btn btn-sm btn-info"><strong>Detailed
+          See</strong></a>
+        <button class="btn btn-sm btn-danger" (click)="leaveBook(book.id)"><strong>Drop the Book</strong></button>
+      </td>
+    </tr>
+  </tbody>
+</table>

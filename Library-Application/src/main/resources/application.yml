@@ -1,0 +1,16 @@
+server:
+  port: 8182
+spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    password: C.ronaldo7
+    url: jdbc:sqlserver://localhost;databaseName=Biblotekaa
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        format_sql: true
+    show-sql: true

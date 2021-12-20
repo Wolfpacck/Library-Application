@@ -1,0 +1,157 @@
+<h2>Writers</h2>
+<!-- <a href="/author"  class="btn btn-primary mb-2">Yenile</a> -->
+<button (click)='ngOnInit()' class="btn btn-primary mb-2">Refresh</button>
+<hr>
+<div *ngIf="message" class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Attention !!! </strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#insertAuthorPanel"
+(click)="loadAuthorFormPanel()" data-whatever="@mdo">Create Author</button>
+<div class="modal fade" id="insertAuthorPanel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create Author...</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div *ngIf="controlAuthorForm; else elseBlock1" class="modal-body">
+        <form [formGroup]="AuthorForm" (ngSubmit)="saveAuthor()">
+          <div class="form-group">
+            <label>name</label>
+            <input type="text" formControlName="name" class="form-control"
+              [ngClass]="{ 'is-invalid': f.name.errors }" />
+            <div *ngIf="f.name.errors" class="invalid-feedback">
+              <div *ngIf="f.name.errors.required">name is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>surname</label>
+            <input type="text" formControlName="surname" class="form-control"
+              [ngClass]="{ 'is-invalid': f.surname.errors }" />
+            <div *ngIf="f.surname.errors" class="invalid-feedback">
+              <div *ngIf="f.surname.errors.required">surname is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>email</label>
+            <input type="text" formControlName="email" class="form-control"
+              [ngClass]="{ 'is-invalid': f.email.errors }" />
+            <div *ngIf="f.email.errors" class="invalid-feedback">
+              <div *ngIf="f.email.errors.email">email must be email adress as required</div>
+              <div *ngIf="f.email.errors.required">email is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>phone</label>
+            <input type="text" formControlName="phone" class="form-control"
+              [ngClass]="{ 'is-invalid': f.phone.errors }" />
+            <div *ngIf="f.phone.errors" class="invalid-feedback">
+              <div *ngIf="f.phone.errors.required">phone is required</div>
+            </div>
+          </div>
+          <!-- <div class="form-group">
+            <label>about</label>
+            <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"  type="text" formControlName="about" class="form-control"
+              [ngClass]="{ 'is-invalid': f.about.errors }" ></textarea>
+            <div *ngIf="f.about.errors" class="invalid-feedback">
+              <div *ngIf="f.about.errors.required">about is required</div>
+            </div>
+          </div> -->
+          <div class="form-group">
+            <label>about</label>
+            <editor formControlName="about" [init]="{height: 500,plugins: 'link'}"></editor>
+            <div *ngIf="f.about.errors" class="invalid-feedback">
+              <div *ngIf="f.about.errors.required">about is required</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+      <ng-template #elseBlock1>
+        <div class="modal-body">
+          <h5>Perfect.....!</h5>
+          <strong>Author was added.....</strong>
+        </div>
+      </ng-template>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<form class="form-inline" [formGroup]="searchForm" (ngSubmit)="searchAuthor()">
+  <div class="form-group">
+    <label for="inputPassword6">Enter author name or surname : </label>
+    <input  type="text" class="form-control mx-sm-3" placeholder="Search (at least 3 characters)" formControlName="name" class="form-control"
+      [ngClass]="{ 'is-invalid': sf.name.errors }" />
+    <div *ngIf="sf.name.errors" class="invalid-feedback">
+      <div *ngIf="sf.name.errors.minLength">name has to be least 3 characters.</div>
+    </div>
+  </div>
+  <div class="from-group">
+    <button type="submit" class="btn btn-primary mb-2"> Search </button>
+  </div>
+</form>
+<hr>
+<div *ngIf="control; else elseBlock2">
+  <ngx-datatable
+  class="bootstrap"
+  [rows]="rows"
+  [columnMode]="'force'"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="'auto'"
+  [externalPaging]="true"
+  [count]="page.totalElements"
+  [offset]="page.page"
+  [limit]="page.size"
+  (page)='setPage($event)'>
+    <ngx-datatable-column prop="id" name="No" maxWidth="40"  sortable="false"></ngx-datatable-column>
+    <ngx-datatable-column prop="name" name="name" sortable="false"></ngx-datatable-column>
+    <ngx-datatable-column prop="surname" name="surname" sortable="false"></ngx-datatable-column>
+    <ngx-datatable-column prop="email" name="email" sortable="false"></ngx-datatable-column>
+    <ngx-datatable-column prop="phone" name="phone" sortable="false"></ngx-datatable-column>
+    <ngx-datatable-column prop="id" name="Actions " sortable="false">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <a [routerLink]="['author-detail/',value]" class="btn btn-sm btn-info"><strong>View Detailed</strong></a>
+        <button class="btn btn-sm btn-danger" (click)="deleteAuthor(value)" ><strong>Delete</strong></button>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>
+
+<ng-template #elseBlock2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">name</th>
+        <th scope="col">Surname</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone</th>
+        <th scope="col">İşlemler</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  *ngFor="let auth of authors">
+        <td>{{auth.id}}</td>
+        <td>{{auth.name}}</td>
+        <td>{{auth.surname}}</td>
+        <td>{{auth.email}}</td>
+        <td>{{auth.phone}}</td>
+        <td>
+          <a [routerLink]="['author-detail/',auth.id]" class="btn btn-sm btn-info"><strong>View detailed</strong></a>
+          <button class="btn btn-sm btn-danger" (click)="deleteAuthor(auth.id)" ><strong>Delete</strong></button></td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+</ng-template>

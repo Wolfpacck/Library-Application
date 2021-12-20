@@ -1,0 +1,89 @@
+<h2>Books</h2>
+<!-- <a href="/book"  class="btn btn-primary mb-2">Yenile</a> -->
+<button (click)='ngOnInit()' class="btn btn-primary mb-2">Refresh</button>
+<hr>
+<div *ngIf="message" class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Attention !!! </strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form class="form-inline" [formGroup]="searchBookForm" (ngSubmit)="searchBook()">
+  <div class="form-group">
+    <label for="inputPassword6">Enter book name : </label>
+    <input type="text" class="form-control mx-sm-3" placeholder="Search (at least 3 characters)" formControlName="name"
+      class="form-control" [ngClass]="{ 'is-invalid': sf.name.errors }" />
+    <div *ngIf="sf.name.errors" class="invalid-feedback">
+      <div *ngIf="sf.name.errors.minLength">name has to be least 3 characters.</div>
+    </div>
+  </div>
+  <div class="from-group">
+    <button type="submit" class="btn btn-primary mb-2"> Search </button>
+  </div>
+</form>
+<hr>
+<div *ngIf="control; else elseBlock2">
+    <ngx-datatable
+    class="bootstrap"
+    [rows]="rows"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="'auto'"
+    [externalPaging]="true"
+    [count]="page.totalElements"
+    [offset]="page.page"
+    [limit]="page.size"
+    (page)='setPage($event)'>
+      <ngx-datatable-column prop="id" name="No" sortable="false" maxWidth="30" draggable="false" ></ngx-datatable-column>
+      <ngx-datatable-column prop="name" name="name" sortable="false" draggable="false"></ngx-datatable-column>
+      <ngx-datatable-column prop="barcode" name="barcode" sortable="false"></ngx-datatable-column>
+      <ngx-datatable-column prop="author.name" name="Author Name" sortable="false"></ngx-datatable-column>
+      <ngx-datatable-column prop="author.surname" name="Author Surname" sortable="false"></ngx-datatable-column>
+      <ngx-datatable-column prop="publisher" name="publisher" sortable="false"></ngx-datatable-column>
+      <ngx-datatable-column prop="bookStatus" name="bookStatus" sortable="false"></ngx-datatable-column>
+      <ngx-datatable-column prop="student.fullname" name="Student " sortable="false"></ngx-datatable-column>
+      <ngx-datatable-column prop="id" name="Actions " sortable="false" draggable="false">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <a [routerLink]="['book-detail/',value]" class="btn btn-sm btn-info"><strong>View Detailed</strong></a>
+          <button class="btn btn-sm btn-danger" (click)="deleteBook(value)" ><strong>Delete</strong></button>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+
+  <ng-template #elseBlock2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">Name</th>
+          <th scope="col">barcode</th>
+          <th scope="col">Author Name</th>
+          <th scope="col">publisher</th>
+          <th scope="col">bookStatus</th>
+          <th scope="col">Student</th>
+          <th scope="col">Transactions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr  *ngFor="let book of books">
+          <td>{{book.id}}</td>
+          <td>{{book.name}}</td>
+          <td>{{book.barcode}}</td>
+          <td>{{book.author.name}}</td>
+          <td>{{book.publisher}}</td>
+          <td>{{book.bookStatus}}</td>
+          <td *ngIf="book.student; else elseStudent">{{book.student.fullname}}</td>
+          <ng-template #elseStudent>
+            <td></td>
+          </ng-template>
+          <td>
+            <a [routerLink]="['book-detail/',value]" class="btn btn-sm btn-success"><strong>View Detailed</strong></a>
+            <button class="btn btn-sm btn-danger" (click)="deleteBook(book.id)" ><strong>Delete</strong></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+  </ng-template>
